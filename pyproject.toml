@@ -1,0 +1,16 @@
+[project]
+name = "ark-cli"
+version = "0.1.0"
+description = "火山引擎命令行工具 - 让人类和 AI Agent 都能在终端中操作火山引擎"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "tos>=2.9.0",
+]
+
+[project.scripts]
+ark-cli = "ark_cli.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
