@@ -152,6 +152,46 @@ def handle_model(args):
         sys.exit(1)
 
 
+def handle_search(args):
+    """处理联网搜索命令"""
+    from ark_cli.search_client import SearchClient
+
+    if not args.query:
+        print("错误: search 产品需要 -q 参数", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        client = SearchClient()
+        result = client.search(
+            query=args.query,
+            count=args.count or 10,
+            time_range=args.time_range,
+        )
+
+        if not result.results:
+            print("未找到相关结果")
+            return
+
+        for i, item in enumerate(result.results, 1):
+            print(f"[{i}] {item.title}")
+            print(f"    {item.site_name} | {item.publish_time[:10] if item.publish_time else '-'}")
+            print(f"    {item.url}")
+            if item.snippet:
+                # 截取摘要前 150 字符
+                snippet = item.snippet[:150] + "..." if len(item.snippet) > 150 else item.snippet
+                print(f"    {snippet}")
+            print()
+
+        print(f"[共 {result.result_count} 条结果 | 耗时: {result.duration_ms}ms]")
+
+    except ValueError as e:
+        print(f"错误: {e}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"搜索失败: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="ark-cli",
@@ -164,7 +204,7 @@ def main():
     )
     parser.add_argument(
         "-p", "--product",
-        choices=["tos", "model"],
+        choices=["tos", "model", "search"],
         help="产品名称",
     )
     parser.add_argument(
@@ -192,6 +232,22 @@ def main():
         "-c", "--content",
         help="对话内容",
     )
+    parser.add_argument(
+        "-q", "--query",
+        help="搜索关键词",
+    )
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=10,
+        help="搜索返回条数 (默认: 10, 最多: 50)",
+    )
+    parser.add_argument(
+        "--time-range",
+        choices=["OneDay", "OneWeek", "OneMonth", "OneYear"],
+        default="OneWeek",
+        help="搜索时间范围 (默认: OneWeek)",
+    )
 
     args = parser.parse_args()
 
@@ -199,6 +255,8 @@ def main():
         handle_tos(args)
     elif args.product == "model":
         handle_model(args)
+    elif args.product == "search":
+        handle_search(args)
     elif args.product:
         print(f"错误: 不支持的产品: {args.product}", file=sys.stderr)
         sys.exit(1)
