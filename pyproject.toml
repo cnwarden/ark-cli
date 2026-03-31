@@ -1,6 +1,6 @@
 [project]
 name = "ark-cli"
-version = "0.2.0"
+version = "0.2.1"
 description = "火山引擎命令行工具 - 让人类和 AI Agent 都能在终端中操作火山引擎"
 readme = "README.md"
 requires-python = ">=3.9"

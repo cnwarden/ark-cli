@@ -155,7 +155,7 @@ def handle_model(args):
 def main():
     parser = argparse.ArgumentParser(
         prog="ark-cli",
-        description="火山引擎命令行工具 - 让人类和 AI Agent 都能在终端中操作火山引擎",
+        description=f"火山引擎命令行工具 v{__version__} - 让人类和 AI Agent 都能在终端中操作火山引擎",
     )
     parser.add_argument(
         "-v", "--version",
