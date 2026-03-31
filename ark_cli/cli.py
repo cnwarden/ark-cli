@@ -140,8 +140,10 @@ def handle_model(args):
 
     try:
         client = ModelClient()
-        response = client.chat(args.model, args.content)
-        print(response)
+        result = client.chat(args.model, args.content)
+        print(result.content)
+        print()
+        print(f"[耗时: {result.duration_ms}ms | tokens: {result.input_tokens} in / {result.output_tokens} out]")
     except ValueError as e:
         print(f"错误: {e}", file=sys.stderr)
         sys.exit(1)
