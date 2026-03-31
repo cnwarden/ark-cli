@@ -35,7 +35,7 @@ jobs:
           TOS_SECRET_KEY: ${{ secrets.TOS_SECRET_KEY }}
         run: |
           VERSION=$(uv run python -c "from ark_cli import __version__; print(__version__)")
-          uv run ark-cli -p tos -a upload -bucket xmp -i dist/ark_cli-${VERSION}-py3-none-any.whl -o ark-cli/ark_cli-${VERSION}-py3-none-any.whl
+          uv run ark-cli -p tos -a upload -bucket xmp -i dist/ark_utils_cli-${VERSION}-py3-none-any.whl -o ark-cli/ark_utils_cli-${VERSION}-py3-none-any.whl
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
