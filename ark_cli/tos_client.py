@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import mimetypes
 import os
 
 import tos
@@ -52,7 +53,11 @@ class TosClient:
         if not os.path.exists(local_path):
             raise FileNotFoundError(f"文件不存在: {local_path}")
 
-        self.client.put_object_from_file(bucket, object_key, local_path)
+        content_type, _ = mimetypes.guess_type(local_path)
+        if content_type is None:
+            content_type = "application/octet-stream"
+
+        self.client.put_object_from_file(bucket, object_key, local_path, content_type=content_type)
 
         # 生成预签名临时链接
         result = self.client.pre_signed_url(
